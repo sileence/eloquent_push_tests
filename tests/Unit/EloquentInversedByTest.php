@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class EloquentInversedByTest extends TestCase
 {
     use DatabaseTransactions, DetectRepeatedQueries;
-
+    
     function test_has_many_inverse_relationship()
     {
         $post = factory(Post::class)->create();
@@ -28,6 +28,19 @@ class EloquentInversedByTest extends TestCase
         $this->assertSame($post, $post->comments->last()->post);
 
         $this->assertNotRepeatedQueries()->flushQueryLog();
+    }
+
+    function test_has_many_count()
+    {
+        $post = factory(Post::class)->create();
+
+        factory(Comment::class)->times(2)->create([
+            'post_id' => $post->id,
+        ]);
+
+        $post = Post::with('comments')->first();
+
+        $this->assertSame(2, $post->comments->count());
     }
 
     function test_has_many_inverse_relationship_eager_loaded()
