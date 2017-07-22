@@ -46,7 +46,7 @@ class EloquentPushTest extends TestCase
 
         $post->category()->associate($category);
 
-        $post->push();
+        $post->pushAll();
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -93,7 +93,7 @@ class EloquentPushTest extends TestCase
         $post->comments->add(factory(Comment::class)->make());
         $post->comments->add(factory(Comment::class)->make());
 
-        $post->push();
+        $post->pushAll();
 
         // push persist the belongs to relation
         $this->assertDatabaseHas('categories', [

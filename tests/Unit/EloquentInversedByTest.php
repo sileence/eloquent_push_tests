@@ -237,4 +237,11 @@ class EloquentInversedByTest extends TestCase
 
         $this->assertNotRepeatedQueries()->flushQueryLog();
     }
+
+    function test_models_with_inversed_by_relations_can_be_exported_as_json()
+    {
+        $post = Post::with('comments')->first();
+
+        $this->assertJson($post->toJson());
+    }
 }
